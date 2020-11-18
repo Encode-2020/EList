@@ -16,34 +16,24 @@ namespace EList.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-     //   private readonly EListContext _context;
 
-        private readonly IUserRepository _repository;
+        private readonly IListRepository _repository;
         private readonly IMapper _mapper;
 
-        public UsersController(IUserRepository repository, IMapper mapper)
+        public UsersController(IListRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<User>> GetUser(int id)
-        //{
-        //    var user = await _repository.GetUserById(id);
+        //GET api/users
+        [HttpGet]
+        public ActionResult<IEnumerable<UserReadDto>> GetAllCommmands()
+        {
+            var users = _repository.GetUsers();
 
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return user;
-        //}
-
-
-
-
-
+            return Ok(_mapper.Map<IEnumerable<UserReadDto>>(users));
+        }
 
         //GET api/users/{id}
         [HttpGet("{id}", Name = "GetUserById")]
@@ -62,12 +52,40 @@ namespace EList.Controllers
         public ActionResult<UserReadDto> CreateUser(UserCreateDto userCreateDto)
         {
             var userModel = _mapper.Map<User>(userCreateDto);
-            _repository.SaveUser(userModel);
+            _repository.CreateUser(userModel);
 
             var userReadDto = _mapper.Map<UserReadDto>(userModel);
 
             return CreatedAtRoute(nameof(GetUserById), new { Id = userReadDto.UserID }, userReadDto);
         }
+        //PUT api/users/{id}
+        [HttpPut("{id}")]
+        public ActionResult UpdateCommand(int id, UserUpdateDto userUpdateDto)
+        {
+            var userModelFromRepo = _repository.GetUserById(id);
+            if (userModelFromRepo == null)
+            {
+                return NotFound();
+            }
+            _mapper.Map(userUpdateDto, userModelFromRepo);
 
+            _repository.UpdateUser(userModelFromRepo);
+
+            return NoContent();
+        }
+        //DELETE api/commands/{id}
+        [HttpDelete("{id}")]
+        public ActionResult DeleteUser(int id)
+        {
+            var userModelFromRepo = _repository.GetUserById(id);
+            if (userModelFromRepo == null)
+            {
+                return NotFound();
+            }
+            _repository.DeleteUser(userModelFromRepo);
+          
+
+            return NoContent();
+        }
     }
 }
