@@ -17,22 +17,21 @@ namespace EList.Data
         }
         public IQueryable<List> Lists => context.Lists
                                     .Include(i => i.Items);
-        public List DeleteList(int listId)
+        public IEnumerable<List> GetLists()
         {
-            //if (list == null)
-            //{
-            //    throw new ArgumentNullException(nameof(list));
-            //}
-            //context.Lists.Remove(list);
+            IEnumerable<List> Lists = context.Lists;
+            return Lists;
+        }
+        public void DeleteList(List list)
+        {
 
-            List dbEntry = context.Lists
-               .FirstOrDefault(l => l.ListId == listId);
+            List dbEntry =  context.Lists
+              .FirstOrDefault(l => l.ListId == list.ListId);
             if (dbEntry != null)
             {
                 context.Lists.Remove(dbEntry);
-                context.SaveChanges();
+             context.SaveChanges();
             }
-            return dbEntry;
 
         }
 
@@ -43,7 +42,7 @@ namespace EList.Data
             if (dbEntry != null)
             {
                 context.Items.Remove(dbEntry);
-                context.SaveChanges();
+               context.SaveChanges();
             }
 
         }
@@ -66,6 +65,8 @@ namespace EList.Data
 
         }
 
+       
+
         public List GetListById(int listId)
         {
             List dbEntry = context.Lists
@@ -77,28 +78,33 @@ namespace EList.Data
             return null;
         }
 
-        public void SaveList(List list)
+        public void CreateList(List list)
         {
-            if (list.ListId == 0)
+            if (list == null)
             {
-                context.Lists.Add(list);
+                throw new ArgumentNullException(nameof(list));
             }
-            else
-            {
-                List dbEntry = context.Lists
-                    .FirstOrDefault(l => l.ListId == list.ListId);
-                if (dbEntry != null)
-                {
-                    dbEntry.ListColor = list.ListColor;
-                    dbEntry.ListId = list.ListId;
-                    dbEntry.Items = list.Items;
-                    dbEntry.ListName = list.ListName;
-                    dbEntry.UserId = list.UserId;
-
-                }
-            }
+            context.Lists.Add(list);
             context.SaveChanges();
 
         }
+
+        public void UpdateList(List list)
+        {
+            List dbEntry = context.Lists
+             .FirstOrDefault(l => l.ListId == list.ListId);
+            if (dbEntry != null)
+            {
+                dbEntry.ListColor = list.ListColor;
+                dbEntry.ListId = list.ListId;
+                dbEntry.Items = list.Items;
+                dbEntry.ListName = list.ListName;
+                dbEntry.UserId = list.UserId;
+
+            }
+            context.SaveChanges();
+        }
+
+
     }
 }

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EList.Data;
 using EList.Models;
+using AutoMapper;
+using EList.Dto;
 
 namespace EList.Controllers
 {
@@ -14,111 +16,78 @@ namespace EList.Controllers
     [ApiController]
     public class ItemController : ControllerBase
     {
-        private readonly EListContext _context;
+        //private readonly EListContext _context;
 
-        public ItemController(EListContext context)
+        //public ItemController(EListContext context)
+        //{
+        //    _context = context;
+        //}
+        private readonly IItemRepository _repository;
+        private readonly IMapper _mapper;
+
+        public ItemController(IItemRepository repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
+            _mapper = mapper;
         }
 
-        // GET: api/Item
+        //GET api/item
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
+        public ActionResult<IEnumerable<ItemReadDto>> GetAllItems()
         {
-            return await _context.Items.ToListAsync();
+            var items = _repository.GetItems();
+
+            return Ok(_mapper.Map<IEnumerable<ItemReadDto>>(items));
         }
-
-        // GET: api/Item/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Item>> GetItem(string id)
+        //GET api/item/{id}
+        [HttpGet("{id}", Name = "GetItemById")]
+        public ActionResult<ItemReadDto> GetItemById(int id)
         {
-            var item = await _context.Items.FindAsync(id);
+            var item = _repository.GetItemById(id);
+            if (item != null)
+            {
+                return Ok(_mapper.Map<ItemReadDto>(item));
+            }
+            return NotFound();
+        }
+        //POST api/item
+        [HttpPost]
+        public ActionResult<ItemReadDto> CreateItem(ItemCreateDto itemCreateDto)
+        {
+            var itemModel = _mapper.Map<Item>(itemCreateDto);
+            _repository.CreatItem(itemModel);
 
-            if (item == null)
+            var itemReadDto = _mapper.Map<ItemReadDto>(itemModel);
+
+            return CreatedAtRoute(nameof(GetItemById), new { Id = itemReadDto.ItemId }, itemReadDto);
+        }
+        //PUT api/item/{id}
+        [HttpPut("{id}")]
+        public ActionResult UpdateCommand(int id, ItemUpdateDto itemUpdateDto)
+        {
+            var itemModelFromRepo = _repository.GetItemById(id);
+            if (itemModelFromRepo == null)
             {
                 return NotFound();
             }
+            _mapper.Map(itemUpdateDto, itemModelFromRepo);
 
-            return item;
-        }
-
-        // PUT: api/Item/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutItem(string id, Item item)
-        {
-            if (id != item.ItemId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(item).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _repository.UpdateItem(itemModelFromRepo);
 
             return NoContent();
         }
-
-        // POST: api/Item
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Item>> PostItem(Item item)
-        {
-            _context.Items.Add(item);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ItemExists(item.ItemId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetItem", new { id = item.ItemId }, item);
-        }
-
-        // DELETE: api/Item/5
+        //DELETE api/item/{id}
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Item>> DeleteItem(string id)
+        public ActionResult DeleteItem(int id)
         {
-            var item = await _context.Items.FindAsync(id);
-            if (item == null)
+            var itemModelFromRepo = _repository.GetItemById(id);
+            if (itemModelFromRepo == null)
             {
                 return NotFound();
             }
+            _repository.DeletItem(itemModelFromRepo);
 
-            _context.Items.Remove(item);
-            await _context.SaveChangesAsync();
-
-            return item;
-        }
-
-        private bool ItemExists(string id)
-        {
-            return _context.Items.Any(e => e.ItemId == id);
+            return NoContent();
         }
     }
 }

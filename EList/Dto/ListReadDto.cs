@@ -1,12 +1,13 @@
-﻿using System;
+﻿using EList.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EList.Models
+namespace EList.Dto
 {
-    public class List
+    public class ListReadDto
     {
         public int ListId { get; set; }
         public int UserId { get; set; }
@@ -14,19 +15,6 @@ namespace EList.Models
         public string ListName { get; set; }
         public string ListColor { get; set; }
         public ICollection<Item> Items { get; set; }
-
-        //public virtual void AddItem(Item item)
-        //{
-        //    item.List = this;
-        //    Items.Add(item);
-        //}
-        //public virtual void DelItem(Item item)
-        //{
-        //    if (item.List == this)
-        //    {
-        //        Items.Remove(item);
-        //    }
-
-        //}
+      
     }
 }

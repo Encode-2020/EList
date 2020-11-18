@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EList.Data;
 using EList.Models;
+using AutoMapper;
+using EList.Dto;
 
 namespace EList.Controllers
 {
@@ -14,97 +16,94 @@ namespace EList.Controllers
     [ApiController]
     public class ListController : ControllerBase
     {
-        private readonly EListContext _context;
+        private readonly IListReposiroty _repository;
+        private readonly IMapper _mapper;
 
-        public ListController(EListContext context)
+        public ListController(IListReposiroty repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         // GET: api/List
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<List>>> GetLists()
+        public ActionResult<IEnumerable<List>> GetLists()
         {
-            return await _context.Lists.ToListAsync();
+            var listItems = _repository.GetLists();
+
+            return Ok(_mapper.Map<IEnumerable<ListReadDto>>(listItems));
         }
 
         // GET: api/List/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<List>> GetList(int id)
+        [HttpGet("{id}", Name ="GetList")]
+        public ActionResult<ListReadDto> GetList(int id)
         {
-            var list = await _context.Lists.FindAsync(id);
-
-            if (list == null)
+            var list = _repository.GetListById(id);
+            if (list != null)
             {
-                return NotFound();
+                return Ok(_mapper.Map<ListReadDto>(list));
             }
+            return NotFound();
 
-            return list;
         }
 
         // PUT: api/List/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutList(int id, List list)
+        public IActionResult PutList(int id, List list)
         {
             if (id != list.ListId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(list).State = EntityState.Modified;
-
-            try
+            var listModelFromRepo = _repository.GetListById(id);
+ 
+            if (listModelFromRepo == null)
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ListExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _mapper.Map(list, listModelFromRepo);
 
+            _repository.UpdateList(listModelFromRepo);
             return NoContent();
+
         }
 
         // POST: api/List
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<List>> PostList(List list)
+        public ActionResult<List> PostList(List list)
         {
-            _context.Lists.Add(list);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetList", new { id = list.ListId }, list);
+            var listModel = _mapper.Map<List>(list);
+            _repository.CreateList(listModel);
+          
+            var listReadDto = _mapper.Map<ListReadDto>(listModel);
+
+            return CreatedAtRoute(nameof(GetList), new { id = listReadDto.ListId }, listReadDto);
         }
 
         // DELETE: api/List/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List>> DeleteList(int id)
+        public ActionResult<List> DeleteList(int id)
         {
-            var list = await _context.Lists.FindAsync(id);
-            if (list == null)
+
+            var listModelFromRepo = _repository.GetListById(id);
+            if (listModelFromRepo == null)
             {
                 return NotFound();
             }
+            _repository.DeleteList(listModelFromRepo);
 
-            _context.Lists.Remove(list);
-            await _context.SaveChangesAsync();
-
-            return list;
+            return NoContent();
         }
 
         private bool ListExists(int id)
         {
-            return _context.Lists.Any(e => e.ListId == id);
+            return _repository.Lists.Any(e => e.ListId == id);
         }
     }
 }

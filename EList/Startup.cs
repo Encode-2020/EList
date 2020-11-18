@@ -28,10 +28,15 @@ namespace EList
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<EListContext>(opt =>
-                                      opt.UseInMemoryDatabase("EList"));
+
+            services.AddDbContext<EListContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("EListConnection")));
+            //services.AddControllers().AddNewtonsoftJson(s => {
+            //    s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            //});
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddScoped<IUserRepository, EFUserRepository>();
+            services.AddScoped<IListRepository, EFUserRepository>();
             services.AddScoped<IListReposiroty, EFListRepository>();
             services.AddScoped<IItemRepository, EFItemRepository>();
             services.AddControllers();
