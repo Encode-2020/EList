@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
+using Microsoft.OpenApi.Models;
 
 namespace EList
 {
@@ -31,7 +32,8 @@ namespace EList
 
             services.AddDbContext<EListContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("EListConnection")));
-            //services.AddControllers().AddNewtonsoftJson(s => {
+            //services.AddControllers().AddNewtonsoftJson(s =>
+            //{
             //    s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             //});
 
@@ -40,11 +42,24 @@ namespace EList
             services.AddScoped<IListReposiroty, EFListRepository>();
             services.AddScoped<IItemRepository, EFItemRepository>();
             services.AddControllers();
+            //ADDED AFTER TUTORIAL
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EList API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            //ADDED AFTER TUTORIAL
+            app.UseSwagger();
+
+            //ADDED AFTER TUTORIAL
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Commander API V1");
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
