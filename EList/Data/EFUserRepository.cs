@@ -2,11 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace EList.Data
 {
-    public class EFUserRepository : IListRepository
+    public class EFUserRepository : IUserRepository
     {
         private EListContext context;
 
@@ -14,17 +13,32 @@ namespace EList.Data
         {
             context = ctx;
         }
-        public IQueryable<User> User => context.Users;
+        public IEnumerable<User> Users => context.Users;
 
         public void CreateUser(User user)
         {
-
+            bool isExist = false;
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
             }
-            context.Users.Add(user);
-            context.SaveChanges();
+
+            isExist = IsUserExists(user.Email);
+            if (!isExist)
+            {
+                context.Users.Add(user);
+                context.SaveChanges();
+            } else
+            {
+                throw new Exception();
+            }
+           
+           
+        }
+        public bool IsUserExists(string email)
+        {
+            //check if any of the email matches the email specified in the Parameter using the ANY extension method.  
+            return context.Users.Any(x => x.Email == email);
         }
 
         public void DeleteUser(User user)
@@ -47,6 +61,17 @@ namespace EList.Data
             }
             return null;
         }
+        public User GetUserByEmail(string email)
+        {
+            User dbEntry = context.Users
+                .FirstOrDefault(u => u.Email == email);
+            if (dbEntry != null)
+            {
+                return dbEntry;
+            }
+            return null;
+        }
+       
 
         public IEnumerable<User> GetUsers()
         {
@@ -63,8 +88,7 @@ namespace EList.Data
             {
                 dbEntry.Password = user.Password;
                 dbEntry.UserID = user.UserID;
-                dbEntry.LastName = user.LastName;
-                dbEntry.FirstName = user.FirstName;
+                dbEntry.Username = user.Username;
                 dbEntry.Email = user.Email;
 
             }

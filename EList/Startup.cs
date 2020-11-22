@@ -14,6 +14,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace EList
 {
@@ -38,10 +41,26 @@ namespace EList
             //});
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddScoped<IListRepository, EFUserRepository>();
+            services.AddScoped<IUserRepository, EFUserRepository>();
             services.AddScoped<IListReposiroty, EFListRepository>();
             services.AddScoped<IItemRepository, EFItemRepository>();
             services.AddControllers();
+            // JWT Token
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+                {
+                options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuer = true,
+                     ValidateAudience = true,
+                     ValidateLifetime = true,
+                     ValidateIssuerSigningKey = true,
+                     ValidIssuer = Configuration["Jwt:Issuer"],
+                     ValidAudience = Configuration["Jwt:Issuer"],
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                 };
+             });
+
             //ADDED AFTER TUTORIAL
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EList API", Version = "v1" });
@@ -57,7 +76,7 @@ namespace EList
 
             //ADDED AFTER TUTORIAL
             app.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Commander API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Elist API V1");
             });
 
             if (env.IsDevelopment())
