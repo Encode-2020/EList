@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace EList.Data
 {
-    public interface IListRepository
+    public interface IUserRepository
     {
 
         User GetUserById(int userId);
-
+        User GetUserByEmail(string email);
+        IEnumerable<User> Users { get; }
 
         IEnumerable<User> GetUsers();
 

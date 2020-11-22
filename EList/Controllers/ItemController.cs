@@ -16,12 +16,6 @@ namespace EList.Controllers
     [ApiController]
     public class ItemController : ControllerBase
     {
-        //private readonly EListContext _context;
-
-        //public ItemController(EListContext context)
-        //{
-        //    _context = context;
-        //}
         private readonly IItemRepository _repository;
         private readonly IMapper _mapper;
 
