@@ -16,7 +16,7 @@ namespace EList.Data
             context = ctx;
         }
 
-        public IQueryable<Item> Items => context.Items.Include(i => i.List);
+        public IQueryable<Item> Items => context.Items;
 
         public void CreatItem(Item item)
         {
@@ -62,7 +62,6 @@ namespace EList.Data
             if (dbEntry != null)
             {
                 dbEntry.ItemId = item.ItemId;
-                dbEntry.List = item.List;
                 dbEntry.ListId = item.ListId;
                 dbEntry.ReminderDateTime = item.ReminderDateTime;
                 dbEntry.Title = item.Title;

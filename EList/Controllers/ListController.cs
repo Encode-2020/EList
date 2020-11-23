@@ -9,9 +9,11 @@ using EList.Data;
 using EList.Models;
 using AutoMapper;
 using EList.Dto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EList.Controllers
 {
+    [Authorize]
     [Route("api/list")]
     [ApiController]
     public class ListController : ControllerBase
@@ -75,10 +77,10 @@ namespace EList.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public ActionResult<List> PostList(List list)
+        public ActionResult<List> PostList(ListCreateDto listCreateDto)
         {
 
-            var listModel = _mapper.Map<List>(list);
+            var listModel = _mapper.Map<List>(listCreateDto);
             _repository.CreateList(listModel);
           
             var listReadDto = _mapper.Map<ListReadDto>(listModel);
@@ -88,6 +90,7 @@ namespace EList.Controllers
 
         // DELETE: api/List/5
         [HttpDelete("{id}")]
+ 
         public ActionResult<List> DeleteList(int id)
         {
 

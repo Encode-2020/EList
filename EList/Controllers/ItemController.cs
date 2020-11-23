@@ -9,19 +9,15 @@ using EList.Data;
 using EList.Models;
 using AutoMapper;
 using EList.Dto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EList.Controllers
 {
     [Route("api/item")]
     [ApiController]
+    [Authorize]
     public class ItemController : ControllerBase
     {
-        //private readonly EListContext _context;
-
-        //public ItemController(EListContext context)
-        //{
-        //    _context = context;
-        //}
         private readonly IItemRepository _repository;
         private readonly IMapper _mapper;
 
@@ -41,6 +37,7 @@ namespace EList.Controllers
         }
         //GET api/item/{id}
         [HttpGet("{id}", Name = "GetItemById")]
+        [Authorize]
         public ActionResult<ItemReadDto> GetItemById(int id)
         {
             var item = _repository.GetItemById(id);
@@ -52,6 +49,7 @@ namespace EList.Controllers
         }
         //POST api/item
         [HttpPost]
+        [Authorize]
         public ActionResult<ItemReadDto> CreateItem(ItemCreateDto itemCreateDto)
         {
             var itemModel = _mapper.Map<Item>(itemCreateDto);
@@ -63,6 +61,7 @@ namespace EList.Controllers
         }
         //PUT api/item/{id}
         [HttpPut("{id}")]
+        [Authorize]
         public ActionResult UpdateCommand(int id, ItemUpdateDto itemUpdateDto)
         {
             var itemModelFromRepo = _repository.GetItemById(id);
@@ -78,6 +77,7 @@ namespace EList.Controllers
         }
         //DELETE api/item/{id}
         [HttpDelete("{id}")]
+        [Authorize]
         public ActionResult DeleteItem(int id)
         {
             var itemModelFromRepo = _repository.GetItemById(id);

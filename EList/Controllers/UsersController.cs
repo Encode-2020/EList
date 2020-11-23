@@ -9,18 +9,20 @@ using EList.Data;
 using EList.Models;
 using AutoMapper;
 using EList.Dto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EList.Controllers
 {
     [Route("api/Users")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
 
-        private readonly IListRepository _repository;
+        private readonly IUserRepository _repository;
         private readonly IMapper _mapper;
 
-        public UsersController(IListRepository repository, IMapper mapper)
+        public UsersController(IUserRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -28,7 +30,8 @@ namespace EList.Controllers
 
         //GET api/users
         [HttpGet]
-        public ActionResult<IEnumerable<UserReadDto>> GetAllCommmands()
+
+        public ActionResult<IEnumerable<UserReadDto>> GetAllUsers()
         {
             var users = _repository.GetUsers();
 
@@ -46,13 +49,33 @@ namespace EList.Controllers
             }
             return NotFound();
         }
-
+        //GET api/users/{email}
+        [HttpPost("{email}",Name = "GetUserByEmail")]
+        public ActionResult<UserReadDto> GetUserByEmail(string email)
+        {
+            var user = _repository.GetUserByEmail(email);
+            if (user != null)
+            {
+                return Ok(_mapper.Map<UserReadDto>(user));
+            }
+            return NotFound();
+        }
+       
         //POST api/users
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult<UserReadDto> CreateUser(UserCreateDto userCreateDto)
         {
             var userModel = _mapper.Map<User>(userCreateDto);
-            _repository.CreateUser(userModel);
+            try
+            {
+                _repository.CreateUser(userModel);
+            } 
+            catch
+            {
+                return Conflict();
+            }
+           
 
             var userReadDto = _mapper.Map<UserReadDto>(userModel);
 

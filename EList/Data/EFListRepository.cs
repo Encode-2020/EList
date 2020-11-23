@@ -54,7 +54,6 @@ namespace EList.Data
             if (_dbEntry != null)
             {
 
-                _dbEntry.List = item.List;
                 _dbEntry.ItemId = item.ItemId;
                 _dbEntry.Description = item.Description;
                 _dbEntry.ReminderDateTime = item.ReminderDateTime;
@@ -84,8 +83,10 @@ namespace EList.Data
             {
                 throw new ArgumentNullException(nameof(list));
             }
+            context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Lists ON");
             context.Lists.Add(list);
             context.SaveChanges();
+            context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Lists OFF");
 
         }
 

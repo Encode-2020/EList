@@ -79,18 +79,11 @@ namespace EList.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
                     b.Property<string>("Password")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserID");
@@ -100,13 +93,11 @@ namespace EList.Migrations
 
             modelBuilder.Entity("EList.Models.Item", b =>
                 {
-                    b.HasOne("EList.Models.List", "List")
+                    b.HasOne("EList.Models.List", null)
                         .WithMany("Items")
                         .HasForeignKey("ListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("List");
                 });
 
             modelBuilder.Entity("EList.Models.List", b =>
