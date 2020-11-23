@@ -54,7 +54,6 @@ namespace EList.Data
             if (_dbEntry != null)
             {
 
-                _dbEntry.List = item.List;
                 _dbEntry.ItemId = item.ItemId;
                 _dbEntry.Description = item.Description;
                 _dbEntry.ReminderDateTime = item.ReminderDateTime;
