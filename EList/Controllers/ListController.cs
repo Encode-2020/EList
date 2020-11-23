@@ -9,9 +9,11 @@ using EList.Data;
 using EList.Models;
 using AutoMapper;
 using EList.Dto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EList.Controllers
 {
+    [Authorize]
     [Route("api/list")]
     [ApiController]
     public class ListController : ControllerBase
@@ -88,6 +90,7 @@ namespace EList.Controllers
 
         // DELETE: api/List/5
         [HttpDelete("{id}")]
+ 
         public ActionResult<List> DeleteList(int id)
         {
 
