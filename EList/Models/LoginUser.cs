@@ -7,15 +7,12 @@ using System.Threading.Tasks;
 
 namespace EList.Models
 {
-    public class User
+    public class LoginUser
     {
-        public int UserID { get; set; }
-
-        public string Username { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress]
-      //  [Remote("IsEmailExists", "Home", ErrorMessage = "User Name already in use")]
+        [Remote("IsEmailExists", "Home", ErrorMessage = "User Name already in use")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Password is required")]
         [UIHint("password")]

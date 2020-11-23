@@ -84,8 +84,10 @@ namespace EList.Data
             {
                 throw new ArgumentNullException(nameof(list));
             }
+            context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Lists ON");
             context.Lists.Add(list);
             context.SaveChanges();
+            context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Lists OFF");
 
         }
 

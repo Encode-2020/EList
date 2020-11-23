@@ -9,11 +9,13 @@ using EList.Data;
 using EList.Models;
 using AutoMapper;
 using EList.Dto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EList.Controllers
 {
     [Route("api/Users")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
 
@@ -28,6 +30,7 @@ namespace EList.Controllers
 
         //GET api/users
         [HttpGet]
+
         public ActionResult<IEnumerable<UserReadDto>> GetAllUsers()
         {
             var users = _repository.GetUsers();
@@ -60,6 +63,7 @@ namespace EList.Controllers
        
         //POST api/users
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult<UserReadDto> CreateUser(UserCreateDto userCreateDto)
         {
             var userModel = _mapper.Map<User>(userCreateDto);

@@ -32,7 +32,7 @@ namespace EList.Controllers
         }
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login([FromBody] User login)
+        public IActionResult Login([FromBody] LoginUser login)
         {
             IActionResult response = Unauthorized();
             var user = AuthenticateUser(login);
@@ -42,7 +42,7 @@ namespace EList.Controllers
                 var tokenString = GenerateJSONWebToken(user);
                 loginResponse.user = user;
                 loginResponse.token = tokenString;
-                response = Ok(new { loginResponse });
+                response = Ok(new {loginResponse});
             }
 
             return response;
@@ -62,7 +62,7 @@ namespace EList.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private User AuthenticateUser(User login)
+        private User AuthenticateUser(LoginUser login)
         {
             var user = _repository.GetUserByEmail(login.Email);
 
