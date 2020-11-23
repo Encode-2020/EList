@@ -17,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Newtonsoft.Json.Serialization;
 
 namespace EList
 {
@@ -35,11 +36,10 @@ namespace EList
 
             services.AddDbContext<EListContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("EListConnection")));
-            //services.AddControllers().AddNewtonsoftJson(s =>
-            //{
-            //    s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            //});
-
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IUserRepository, EFUserRepository>();
             services.AddScoped<IListReposiroty, EFListRepository>();

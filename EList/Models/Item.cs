@@ -10,7 +10,6 @@ namespace EList.Models
     {
         public int ItemId { get; set; }
         public int ListId { get; set; }
-        public List List { get; set; }
         [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
        
