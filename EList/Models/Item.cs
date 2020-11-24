@@ -15,6 +15,7 @@ namespace EList.Models
        
         public DateTime? ReminderDateTime { get; set; }
 
-        public string Title { get; set; }
+        public bool isCompleted { get; set; }
+
     }
 }

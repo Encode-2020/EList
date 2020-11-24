@@ -36,8 +36,8 @@ namespace EList.Migrations
                     b.Property<DateTime?>("ReminderDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isCompleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("ItemId");
 

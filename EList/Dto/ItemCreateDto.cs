@@ -15,5 +15,7 @@ namespace EList.Dto
         public string Description { get; set; }
 
         public DateTime? ReminderDateTime { get; set; }
+
+        public bool isCompleted { get; set; }
     }
 }
