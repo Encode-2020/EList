@@ -33,9 +33,6 @@ namespace EList.Migrations
                     b.Property<int>("ListId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ReminderDateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("isCompleted")
                         .HasColumnType("bit");
 
@@ -53,12 +50,15 @@ namespace EList.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("ListColor")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ListColor")
+                        .HasColumnType("int");
 
                     b.Property<string>("ListName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ReminderDateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");

@@ -19,7 +19,7 @@ namespace EList.Data
                                     .Include(i => i.Items);
         public IEnumerable<List> GetLists()
         {
-            IEnumerable<List> Lists = context.Lists;
+            IEnumerable<List> Lists = context.Lists.Include(i => i.Items);
             return Lists;
         }
         public void DeleteList(List list)
@@ -35,6 +35,23 @@ namespace EList.Data
 
         }
 
+        public void EditItem(Item item)
+        {
+            Item _dbEntry = context.Items
+                   .FirstOrDefault(i => i.ItemId == item.ItemId);
+            if (_dbEntry != null)
+            {
+
+                _dbEntry.ItemId = item.ItemId;
+                _dbEntry.Description = item.Description;
+                _dbEntry.isCompleted = item.isCompleted;
+                _dbEntry.ListId = item.ListId;
+            }
+
+            context.SaveChanges();
+
+        }
+
         public void DelItem(Item item)
         {
             Item dbEntry = context.Items
@@ -47,25 +64,7 @@ namespace EList.Data
 
         }
 
-        public void EditItem(Item item)
-        {
-            Item _dbEntry = context.Items
-                   .FirstOrDefault(i => i.ItemId == item.ItemId);
-            if (_dbEntry != null)
-            {
-
-                _dbEntry.ItemId = item.ItemId;
-                _dbEntry.Description = item.Description;
-                _dbEntry.ReminderDateTime = item.ReminderDateTime;
-                _dbEntry.ListId = item.ListId;
-            }
-
-            context.SaveChanges();
-
-        }
-
        
-
         public List GetListById(int listId)
         {
             List dbEntry = context.Lists
@@ -83,10 +82,10 @@ namespace EList.Data
             {
                 throw new ArgumentNullException(nameof(list));
             }
-            context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Lists ON");
+          //  context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Lists ON");
             context.Lists.Add(list);
             context.SaveChanges();
-            context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Lists OFF");
+           // context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Lists OFF");
 
         }
 

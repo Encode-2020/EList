@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EList.Migrations
 {
     [DbContext(typeof(EListContext))]
-    [Migration("20201123030749_initialCreate")]
+    [Migration("20201124075529_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,11 +35,8 @@ namespace EList.Migrations
                     b.Property<int>("ListId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ReminderDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isCompleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("ItemId");
 
@@ -55,12 +52,15 @@ namespace EList.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("ListColor")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ListColor")
+                        .HasColumnType("int");
 
                     b.Property<string>("ListName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ReminderDateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
