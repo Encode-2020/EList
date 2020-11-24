@@ -66,7 +66,7 @@ namespace EList.Controllers
         {
             var user = _repository.GetUserByEmail(login.Email);
 
-            if (user != null && login.Email == user.Email)
+            if (user != null && login.Email.ToLower() == user.Email.ToLower())
             {
                 return user;
             }

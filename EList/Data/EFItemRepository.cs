@@ -63,8 +63,7 @@ namespace EList.Data
             {
                 dbEntry.ItemId = item.ItemId;
                 dbEntry.ListId = item.ListId;
-                dbEntry.ReminderDateTime = item.ReminderDateTime;
-                dbEntry.Title = item.Title;
+                dbEntry.isCompleted = item.isCompleted;
 
             }
             context.SaveChanges();

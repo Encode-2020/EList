@@ -53,7 +53,7 @@ namespace EList.Controllers
         [HttpPost("{email}",Name = "GetUserByEmail")]
         public ActionResult<UserReadDto> GetUserByEmail(string email)
         {
-            var user = _repository.GetUserByEmail(email);
+            var user = _repository.GetUserByEmail(email.ToLower());
             if (user != null)
             {
                 return Ok(_mapper.Map<UserReadDto>(user));
