@@ -15,5 +15,6 @@ namespace EList.Dto
         public string Description { get; set; }
 
         public bool IsCompleted { get; set; }
+        public string URL { get; set; }
     }
 }
