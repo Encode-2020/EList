@@ -16,7 +16,8 @@ namespace EList.Migrations
                     UserId = table.Column<int>(type: "int", nullable: false),
                     ListName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ListColor = table.Column<int>(type: "int", nullable: false),
-                    ReminderDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ReminderDateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastEdited = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,7 +47,8 @@ namespace EList.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ListId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    isCompleted = table.Column<bool>(type: "bit", nullable: false)
+                    isCompleted = table.Column<bool>(type: "bit", nullable: false),
+                    URL = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

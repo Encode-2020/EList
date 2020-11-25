@@ -16,6 +16,7 @@ namespace EList.Dto
         public ListColors ListColor { get; set; }
         public DateTime? ReminderDateTime { get; set; }
         public ICollection<Item> Items { get; set; }
-        
+        public DateTime LastEdited { get; set; }
+
     }
 }

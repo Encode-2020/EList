@@ -25,6 +25,7 @@ namespace EList.Models
         public ListColors ListColor { get; set; }
         public ICollection<Item> Items { get; set; }
         public DateTime? ReminderDateTime { get; set; }
+        public DateTime LastEdited { get; set; }
 
         public virtual void AddItem(Item item)
         {
