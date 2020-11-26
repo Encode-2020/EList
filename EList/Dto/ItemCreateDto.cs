@@ -14,5 +14,6 @@ namespace EList.Dto
         public string Description { get; set; }
 
         public bool isCompleted { get; set; } = false;
+        public string URL { get; set; } = "/images/blank-check-box.png";
     }
 }

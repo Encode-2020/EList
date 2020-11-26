@@ -10,6 +10,7 @@ using EList.Models;
 using AutoMapper;
 using EList.Dto;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace EList.Controllers
 {
@@ -75,18 +76,78 @@ namespace EList.Controllers
 
             return NoContent();
         }
-        //DELETE api/item/{id}
-        [HttpDelete("{id}")]
+        //DELETE api/item/{listId}/{id}
+        [HttpDelete("{listId}/{id}")]
         [Authorize]
-        public ActionResult DeleteItem(int id)
+        public ActionResult DeleteItem(int listId, int id)
         {
+
             var itemModelFromRepo = _repository.GetItemById(id);
+           
             if (itemModelFromRepo == null)
             {
                 return NotFound();
             }
-            _repository.DeletItem(itemModelFromRepo);
+            if (itemModelFromRepo.ListId == listId)
+            {
+                _repository.DeletItem(itemModelFromRepo);
+            } else
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
 
+        ////PATCH api/item/{listId}/{id}
+        //[HttpPatch("{listId}/{id}")]
+        //public ActionResult PartialItemUpdate(int listId, int id, [FromBody] JsonPatchDocument<ItemUpdateDto> patchDoc)
+        //{
+        //    var itemModelFromRepo = _repository.GetItemByListId(listId,id);
+        //    if (itemModelFromRepo == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var itemToPatch = _mapper.Map<ItemUpdateDto>(itemModelFromRepo);
+        //    patchDoc.ApplyTo(itemToPatch);
+
+        //    if (!TryValidateModel(itemToPatch))
+        //    {
+        //        return ValidationProblem(ModelState);
+        //    }
+
+        //    _mapper.Map(itemToPatch, itemModelFromRepo);
+
+        //    _repository.UpdateItem(itemModelFromRepo);
+        //    return NoContent();
+        //}
+        //PATCH api/item/{listId}/{id}
+        [HttpPatch("{listId}/{id}/{isCompleted}")]
+        public ActionResult PartialItemUpdate(int listId, int id, bool status)
+        {
+            var itemModelFromRepo = _repository.GetItemByListId(listId, id);
+            if (itemModelFromRepo == null)
+            {
+                return NotFound();
+            }
+            var itemToPatch = _mapper.Map<ItemUpdateDto>(itemModelFromRepo);
+            itemToPatch.isCompleted = status;
+            if (status == true)
+            {
+                itemToPatch.URL = "/images/select.png";
+            } else
+            {
+                itemToPatch.URL = "/images/blank-check-box.png";
+            }
+
+            if (!TryValidateModel(itemToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(itemToPatch, itemModelFromRepo);
+
+            _repository.UpdateItem(itemModelFromRepo);
             return NoContent();
         }
     }

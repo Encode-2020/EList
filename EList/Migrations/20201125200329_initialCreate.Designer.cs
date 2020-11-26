@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EList.Migrations
 {
     [DbContext(typeof(EListContext))]
-    [Migration("20201124075529_initialCreate")]
+    [Migration("20201125200329_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,6 +35,9 @@ namespace EList.Migrations
                     b.Property<int>("ListId")
                         .HasColumnType("int");
 
+                    b.Property<string>("URL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("isCompleted")
                         .HasColumnType("bit");
 
@@ -51,6 +54,9 @@ namespace EList.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
+
+                    b.Property<DateTime>("LastEdited")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ListColor")
                         .HasColumnType("int");

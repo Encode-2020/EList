@@ -33,6 +33,9 @@ namespace EList.Migrations
                     b.Property<int>("ListId")
                         .HasColumnType("int");
 
+                    b.Property<string>("URL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("isCompleted")
                         .HasColumnType("bit");
 
@@ -49,6 +52,9 @@ namespace EList.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
+
+                    b.Property<DateTime>("LastEdited")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ListColor")
                         .HasColumnType("int");
