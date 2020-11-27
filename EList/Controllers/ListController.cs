@@ -57,19 +57,30 @@ namespace EList.Controllers
             return NotFound();
 
         }
-      
         // GET: api/List/math
         [HttpPost("{name}", Name = "GetListByName")]
-        public ActionResult<ListReadDto> GetListByName(string name)
+        public ActionResult<IEnumerable<List>> GetListByName(string name)
         {
-            var list = _repository.GetListByName(name);
-            if (list != null)
-            {
-                return Ok(_mapper.Map<ListReadDto>(list));
+            var lists = _repository.GetListByName(name);
+            if(lists != null){
+                return Ok(_mapper.Map<IEnumerable<ListReadDto>>(lists));
             }
             return NotFound();
-
+           
         }
+
+        //// GET: api/List/math
+        //[HttpPost("{name}", Name = "GetListByName")]
+        //public ActionResult<ListReadDto> GetListByName(string name)
+        //{
+        //    var list = _repository.GetListByName(name);
+        //    if (list != null)
+        //    {
+        //        return Ok(_mapper.Map<ListReadDto>(list));
+        //    }
+        //    return NotFound();
+
+        //}
 
         // PUT: api/List/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

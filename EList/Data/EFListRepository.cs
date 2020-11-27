@@ -80,10 +80,9 @@ namespace EList.Data
             }
             return null;
         }
-        public List GetListByName(string name)
+        public IEnumerable<List> GetListByName(string name)
         {
-            List dbEntry = context.Lists
-                   .FirstOrDefault(l => l.ListName.ToLower() == name.ToLower());
+            IEnumerable<List> dbEntry = context.Lists.Where(l => l.ListName.ToLower() == name.ToLower());
             if (dbEntry != null)
             {
                 return dbEntry;

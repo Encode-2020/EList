@@ -18,7 +18,7 @@ namespace EList.Data
         void CreateList(List List);
         void UpdateList(List List);
         List GetListById(int listId);
-        List GetListByName(string name);
+        IEnumerable<List> GetListByName(string name);
         void DeleteList(List list);
        void EditItem(Item item);
        void DelItem(Item item);
