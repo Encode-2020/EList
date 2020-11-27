@@ -38,11 +38,11 @@ namespace EList.Controllers
         }
         // GET: api/List/1
         [HttpGet("ByUserId/{id}")]
-        public ActionResult<List<List>> GetListsByUserId(int id)
+        public ActionResult<IEnumerable<List>> GetListsByUserId(int id)
         {
             var listItems = _repository.GetListsByUserId(id);
 
-            return Ok(_mapper.Map<List<ListReadDto>>(listItems));
+            return Ok(_mapper.Map<IEnumerable<ListReadDto>>(listItems));
         }
 
         // GET: api/List/5
