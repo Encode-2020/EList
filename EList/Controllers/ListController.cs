@@ -38,8 +38,8 @@ namespace EList.Controllers
         }
 
         // GET: api/List/5
-        [HttpGet("{id}", Name ="GetList")]
-        public ActionResult<ListReadDto> GetList(int id)
+        [HttpGet("{id}", Name = "GetListById")]
+        public ActionResult<ListReadDto> GetListById(int id)
         {
             var list = _repository.GetListById(id);
             if (list != null)
@@ -50,10 +50,10 @@ namespace EList.Controllers
 
         }
         // GET: api/List/math
-        [HttpGet("{name}", Name = "GetListByName")]
-        public ActionResult<ListReadDto> GetListByName(string listName)
+        [HttpPost("{name}", Name = "GetListByName")]
+        public ActionResult<ListReadDto> GetListByName(string name)
         {
-            var list = _repository.GetListByName(listName);
+            var list = _repository.GetListByName(name);
             if (list != null)
             {
                 return Ok(_mapper.Map<ListReadDto>(list));
@@ -98,7 +98,7 @@ namespace EList.Controllers
           
             var listReadDto = _mapper.Map<ListReadDto>(listModel);
 
-            return CreatedAtRoute(nameof(GetList), new { id = listReadDto.ListId }, listReadDto);
+            return CreatedAtRoute(nameof(GetListById), new { id = listReadDto.ListId }, listReadDto);
         }
 
         // DELETE: api/List/5
