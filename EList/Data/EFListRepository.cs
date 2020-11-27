@@ -22,6 +22,19 @@ namespace EList.Data
             IEnumerable<List> Lists = context.Lists.Include(i => i.Items);
             return Lists;
         }
+        public List<List> GetListsByUserId(int id)
+        {
+            List<List> ListbyUserId = new List<List>();
+            IEnumerable<List> Lists = context.Lists.Include(i => i.Items);
+            foreach(List l in Lists)
+            {
+                if(l.UserId == id)
+                {
+                    ListbyUserId.Add(l);
+                }
+            }
+            return ListbyUserId;
+        }
         public void DeleteList(List list)
         {
 
@@ -78,7 +91,7 @@ namespace EList.Data
         public List GetListByName(string name)
         {
             List dbEntry = context.Lists
-                   .FirstOrDefault(l => l.ListName == name);
+                   .FirstOrDefault(l => l.ListName.ToLower() == name.ToLower());
             if (dbEntry != null)
             {
                 return dbEntry;
@@ -88,15 +101,26 @@ namespace EList.Data
 
         public void CreateList(List list)
         {
+            bool isExist = false;
             if (list == null)
             {
                 throw new ArgumentNullException(nameof(list));
             }
-          //  context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Lists ON");
-            context.Lists.Add(list);
-            context.SaveChanges();
-           // context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Lists OFF");
-
+           
+            isExist = IsListExists(list.ListName);
+            if (!isExist)
+            {
+                context.Lists.Add(list);
+                context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception();
+            }
+        }
+        public bool IsListExists(string name)
+        {
+            return context.Lists.Any(x => x.ListName.ToLower() == name.ToLower());
         }
 
         public void UpdateList(List list)
