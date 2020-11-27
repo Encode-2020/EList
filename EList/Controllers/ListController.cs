@@ -10,6 +10,7 @@ using EList.Models;
 using AutoMapper;
 using EList.Dto;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace EList.Controllers
 {
@@ -108,5 +109,7 @@ namespace EList.Controllers
         {
             return _repository.Lists.Any(e => e.ListId == id);
         }
+
+        
     }
 }

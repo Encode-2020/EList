@@ -48,6 +48,16 @@ namespace EList.Data
             }
             return null;
         }
+        public Item GetItemByListId(int listId, int itemId)
+        {
+            Item dbEntry = context.Items
+                .FirstOrDefault(i => i.ItemId == itemId && i.ListId == listId);
+             if (dbEntry != null)
+                {
+                  return dbEntry;
+                }
+            return null;
+        }
 
         public IEnumerable<Item> GetItems()
         {
@@ -63,8 +73,8 @@ namespace EList.Data
             {
                 dbEntry.ItemId = item.ItemId;
                 dbEntry.ListId = item.ListId;
-                dbEntry.ReminderDateTime = item.ReminderDateTime;
-                dbEntry.Title = item.Title;
+                dbEntry.isCompleted = item.isCompleted;
+                dbEntry.URL = item.URL;
 
             }
             context.SaveChanges();

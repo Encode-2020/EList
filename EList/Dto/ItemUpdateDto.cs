@@ -10,10 +10,10 @@ namespace EList.Dto
     public class ItemUpdateDto
     {
         public int ListId { get; set; }
-        public List List { get; set; }
         [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
 
-        public DateTime? ReminderDateTime { get; set; }
+        public bool isCompleted { get; set; }
+        public string URL { get; set; }
     }
 }

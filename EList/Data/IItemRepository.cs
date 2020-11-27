@@ -12,7 +12,7 @@ namespace EList.Data
 
         Item GetItemById(int itemId);
 
-
+        Item GetItemByListId(int itemId, int listId);
         IEnumerable<Item> GetItems();
 
         void CreatItem(Item item);
