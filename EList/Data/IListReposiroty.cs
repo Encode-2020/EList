@@ -13,6 +13,7 @@ namespace EList.Data
         IQueryable<List> Lists { get; }
 
         IEnumerable<List> GetLists();
+        List<List> GetListsByUserId(int id);
 
         void CreateList(List List);
         void UpdateList(List List);

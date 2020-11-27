@@ -63,7 +63,7 @@ namespace EList.Controllers
         //PUT api/item/{id}
         [HttpPut("{id}")]
         [Authorize]
-        public ActionResult UpdateCommand(int id, ItemUpdateDto itemUpdateDto)
+        public ActionResult UpdateItem(int id, ItemUpdateDto itemUpdateDto)
         {
             var itemModelFromRepo = _repository.GetItemById(id);
             if (itemModelFromRepo == null)
