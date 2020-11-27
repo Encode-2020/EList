@@ -98,7 +98,7 @@ namespace EList.Data
                 throw new ArgumentNullException(nameof(list));
             }
            
-            isExist = IsListExists(list.ListName);
+            isExist = IsListExists(list.ListName);  
             if (!isExist)
             {
                 context.Lists.Add(list);
