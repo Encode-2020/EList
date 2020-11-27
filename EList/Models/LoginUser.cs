@@ -12,7 +12,7 @@ namespace EList.Models
 
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress]
-        [Remote("IsEmailExists", "Home", ErrorMessage = "User Name already in use")]
+        [Remote("IsEmailExists", "LoginUser", ErrorMessage = "Email already in use")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Password is required")]
         [UIHint("password")]

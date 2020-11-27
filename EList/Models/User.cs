@@ -12,7 +12,7 @@ namespace EList.Models
         public int UserID { get; set; }
 
         public string Username { get; set; }
-
+        [Remote("IsEmailExists", "Users", ErrorMessage = "Email already in use")]
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress]
         public string Email { get; set; }

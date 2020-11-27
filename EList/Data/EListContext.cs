@@ -18,14 +18,14 @@ namespace EList.Data
         public DbSet<User> Users { get; set; }
         public DbSet<List> Lists { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (optionsBuilder.IsConfigured)
-        //    {
-        //        return;
-        //    }
-        //    optionsBuilder.UseSqlServer($"Server = (localdb)\\MSSQLLocalDB; Database = EListDB; Trusted_Connection = True; MultipleActiveResultSets = true");
-        //    base.OnConfiguring(optionsBuilder);
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (optionsBuilder.IsConfigured)
+            {
+                return;
+            }
+            optionsBuilder.UseSqlServer($"Server=elistdb.cpgfkgne7e1e.us-east-2.rds.amazonaws.com;Database=EListDB;User ID= admin;Password=password;ConnectRetryCount=0;");
+            base.OnConfiguring(optionsBuilder);
+        }
     }
 }
