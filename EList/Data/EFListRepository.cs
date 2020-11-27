@@ -24,9 +24,8 @@ namespace EList.Data
         }
         public IEnumerable<List> GetListsByUserId(int id)
         {
-            IEnumerable<List> Lists = context.Lists.Include(i => i.Items);
-            IEnumerable<List> ListbyUserId = context.Lists.Where(l => l.UserId == id);
-            return ListbyUserId;
+            IEnumerable<List> Lists = context.Lists.Where(l => l.UserId == id).Include(l => l.Items);
+            return Lists;
         }
         public void DeleteList(List list)
         {
