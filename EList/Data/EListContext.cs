@@ -14,6 +14,7 @@ namespace EList.Data
         {
         }
 
+
         public DbSet<Item> Items { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<List> Lists { get; set; }

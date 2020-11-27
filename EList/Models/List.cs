@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace EList.Models
         public int ListId { get; set; }
         public int UserId { get; set; }
         [Required(ErrorMessage = "List Title is required")]
+        [Remote("IsTitleExists", "List", ErrorMessage = "List already exist")]
         public string ListName { get; set; }
         public ListColors ListColor { get; set; }
         public ICollection<Item> Items { get; set; }

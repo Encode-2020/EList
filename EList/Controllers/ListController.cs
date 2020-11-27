@@ -36,10 +36,18 @@ namespace EList.Controllers
 
             return Ok(_mapper.Map<IEnumerable<ListReadDto>>(listItems));
         }
+        // GET: api/List/1
+        [HttpGet("ByUserId/{id}")]
+        public ActionResult<List<List>> GetListsByUserId(int id)
+        {
+            var listItems = _repository.GetListsByUserId(id);
+
+            return Ok(_mapper.Map<List<ListReadDto>>(listItems));
+        }
 
         // GET: api/List/5
-        [HttpGet("{id}", Name ="GetList")]
-        public ActionResult<ListReadDto> GetList(int id)
+        [HttpGet("{id}", Name = "GetListById")]
+        public ActionResult<ListReadDto> GetListById(int id)
         {
             var list = _repository.GetListById(id);
             if (list != null)
@@ -49,11 +57,12 @@ namespace EList.Controllers
             return NotFound();
 
         }
+      
         // GET: api/List/math
-        [HttpGet("{name}", Name = "GetListByName")]
-        public ActionResult<ListReadDto> GetListByName(string listName)
+        [HttpPost("{name}", Name = "GetListByName")]
+        public ActionResult<ListReadDto> GetListByName(string name)
         {
-            var list = _repository.GetListByName(listName);
+            var list = _repository.GetListByName(name);
             if (list != null)
             {
                 return Ok(_mapper.Map<ListReadDto>(list));
@@ -66,12 +75,8 @@ namespace EList.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public IActionResult PutList(int id, List list)
+        public IActionResult PutList(int id, ListUpdateDto listUpdateDto)
         {
-            if (id != list.ListId)
-            {
-                return BadRequest();
-            }
 
             var listModelFromRepo = _repository.GetListById(id);
  
@@ -79,12 +84,13 @@ namespace EList.Controllers
             {
                 return NotFound();
             }
-            _mapper.Map(list, listModelFromRepo);
+            _mapper.Map(listUpdateDto, listModelFromRepo);
 
             _repository.UpdateList(listModelFromRepo);
             return NoContent();
 
         }
+
 
         // POST: api/List
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -98,7 +104,7 @@ namespace EList.Controllers
           
             var listReadDto = _mapper.Map<ListReadDto>(listModel);
 
-            return CreatedAtRoute(nameof(GetList), new { id = listReadDto.ListId }, listReadDto);
+            return CreatedAtRoute(nameof(GetListById), new { id = listReadDto.ListId }, listReadDto);
         }
 
         // DELETE: api/List/5
