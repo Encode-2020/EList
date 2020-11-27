@@ -107,7 +107,7 @@ namespace EList.Data
         }
         public bool IsListExists(string name)
         {
-            return context.Lists.Any(x => x.ListName == name);
+            return context.Lists.Any(x => x.ListName.ToLower() == name.ToLower());
         }
 
         public void UpdateList(List list)
