@@ -122,7 +122,7 @@ namespace EList.Controllers
         //    return NoContent();
         //}
         //PATCH api/item/{listId}/{id}
-        [HttpPatch("{listId}/{id}/{isCompleted}")]
+        [HttpPatch("{listId}/{id}/{status}")]
         public ActionResult PartialItemUpdate(int listId, int id, bool status)
         {
             var itemModelFromRepo = _repository.GetItemByListId(listId, id);
