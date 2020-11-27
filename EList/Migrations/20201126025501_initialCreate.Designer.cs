@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EList.Migrations
 {
     [DbContext(typeof(EListContext))]
-    [Migration("20201125200329_initialCreate")]
+    [Migration("20201126025501_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
