@@ -83,7 +83,7 @@ namespace EList.Controllers
         }
         //PUT api/users/{id}
         [HttpPut("{id}")]
-        public ActionResult UpdateCommand(int id, UserUpdateDto userUpdateDto)
+        public ActionResult UpdateUser(int id, UserUpdateDto userUpdateDto)
         {
             var userModelFromRepo = _repository.GetUserById(id);
             if (userModelFromRepo == null)
@@ -96,7 +96,7 @@ namespace EList.Controllers
 
             return NoContent();
         }
-        //DELETE api/commands/{id}
+        //DELETE api/users/{id}
         [HttpDelete("{id}")]
         public ActionResult DeleteUser(int id)
         {

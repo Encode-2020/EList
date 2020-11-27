@@ -75,6 +75,16 @@ namespace EList.Data
             }
             return null;
         }
+        public List GetListByName(string name)
+        {
+            List dbEntry = context.Lists
+                   .FirstOrDefault(l => l.ListName == name);
+            if (dbEntry != null)
+            {
+                return dbEntry;
+            }
+            return null;
+        }
 
         public void CreateList(List list)
         {
