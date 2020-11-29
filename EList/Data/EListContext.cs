@@ -25,7 +25,7 @@ namespace EList.Data
             {
                 return;
             }
-            optionsBuilder.UseSqlServer($"Server=elistdb.cpgfkgne7e1e.us-east-2.rds.amazonaws.com;Database=EListDB;User ID= admin;Password=password;ConnectRetryCount=0;");
+            optionsBuilder.UseSqlServer($"<connection string>");
             base.OnConfiguring(optionsBuilder);
         }
     }
